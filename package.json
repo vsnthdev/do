@@ -13,9 +13,9 @@
     },
     "dependencies": {
         "bnx": "^0.3.1",
-        "commander": "^11.1.0",
-        "inquirer": "^9.2.12",
+        "commander": "^12.0.0",
+        "inquirer": "^9.2.15",
         "prompts": "^2.4.2",
-        "rupa": "^0.0.3"
+        "rupa": "^0.0.4"
     }
 }

@@ -1,0 +1,21 @@
+{
+    "name": "do",
+    "module": "index.ts",
+    "type": "module",
+    "bin": "index.ts",
+    "devDependencies": {
+        "@types/inquirer": "^9.0.7",
+        "@types/prompts": "^2.4.9",
+        "bun-types": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "bnx": "^0.3.1",
+        "commander": "^11.1.0",
+        "inquirer": "^9.2.12",
+        "prompts": "^2.4.2",
+        "rupa": "^0.0.3"
+    }
+}

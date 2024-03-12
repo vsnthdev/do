@@ -61,5 +61,7 @@ async function action() {
 }
 
 export default function setup(app: Command) {
-    app.command('clean').action(action)
+    app.command('clean')
+        .action(action)
+        .description('Updates main branch to latest, deletes current branch')
 }

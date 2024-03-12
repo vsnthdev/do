@@ -52,5 +52,7 @@ async function action() {
 }
 
 export default function setup(app: Command) {
-    app.command('update').action(action)
+    app.command('update')
+        .action(action)
+        .description('Update a Git repo to latest remote code')
 }

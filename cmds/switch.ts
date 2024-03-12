@@ -1,6 +1,6 @@
 import { $ } from 'bnx'
-import { type Command } from 'commander'
 import prompt from 'prompts'
+import { type Command } from 'commander'
 
 async function action() {
     const raw = (await $`git for-each-ref --format='%(refname:short)' refs/heads`).trim()
@@ -20,5 +20,7 @@ async function action() {
 }
 
 export default function setup(app: Command) {
-    app.command('switch').action(action)
+    app.command('switch')
+        .action(action)
+        .description('Interactively switch between Git branches')
 }

@@ -1,0 +1,56 @@
+/*
+ *  Updates the GitHub repo to latest codebase.
+ *  Created On 12 March 2024
+ */
+
+import { $ } from 'bnx'
+import { Listr } from 'listr2'
+import { execaCommand } from 'execa'
+import { type Command } from 'commander'
+
+interface Ctx {
+    remotes: string[]
+}
+
+async function action() {
+    const remotes = (await $`git remote`).trim().split('\n')
+
+    const tasks = new Listr<Ctx>(
+        [], {
+        ctx: {
+            remotes,
+        }
+    }
+    )
+
+    tasks.add({
+        title: 'Fetching updates',
+        task: (ctx, task): Listr =>
+            task.newListr([
+                {
+                    title: 'Fetching updates',
+                    task: () => execaCommand('git fetch')
+                },
+            ].concat(remotes.map(remote => ({
+                title: `Fetching ${remote} remote`,
+                task: () => execaCommand(`git fetch ${remote}`)
+            }))))
+    })
+
+    tasks.add([
+        {
+            title: `Pulling new changes`,
+            task: () => execaCommand(`git pull`)
+        },
+    ])
+
+    try {
+        await tasks.run()
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+export default function setup(app: Command) {
+    app.command('update').action(action)
+}

@@ -3,8 +3,8 @@ import prompt from 'prompts'
 import { type Command } from 'commander'
 
 async function action() {
-    const raw = (await $`git for-each-ref --format='%(refname:short)' refs/heads`).trim()
-    const branches = raw.split('\n').map(str => str.replaceAll('\'', ''))
+    const raw = (await $`git for-each-ref --format='%(refname:short)' refs/remotes`).trim()
+    const branches = raw.split('\n').map(str => str.replaceAll('\'', '').replace('origin/', '')).filter(str => str != 'HEAD')
 
     const { ans } = await prompt({
         type: 'select',
@@ -16,7 +16,7 @@ async function action() {
         }))
     })
 
-    await $(`git checkout ${ans}`)
+    ans && await $(`git checkout ${ans}`)
 }
 
 export default function setup(app: Command) {

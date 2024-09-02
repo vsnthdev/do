@@ -8,17 +8,17 @@ interface Ctx {
     remotes: string[]
 }
 
-async function action() {
+async function action(branch: string) {
     const currentBranch = (await $`git branch --show-current`).trim()
     const remotes = (await $`git remote`).trim().split('\n')
 
-    if (currentBranch == 'main') return console.log('You are already in main!')
+    if (currentBranch == branch) return console.log(`You are already in ${branch}!`)
 
     const tasks = new Listr<Ctx>(
         [
             {
-                title: 'Switching to main branch',
-                task: () => execaCommand('git checkout main')
+                title: `Switching to ${branch} branch`,
+                task: () => execaCommand(`git checkout ${branch}`)
             },
         ], {
         ctx: {
@@ -30,7 +30,7 @@ async function action() {
 
     tasks.add({
         title: 'Fetching updates',
-        task: (ctx, task): Listr =>
+        task: (_, task): Listr =>
             task.newListr([
                 {
                     title: 'Fetching updates',
@@ -64,4 +64,5 @@ export default function setup(app: Command) {
     app.command('clean')
         .action(action)
         .description('Updates main branch to latest, deletes current branch')
+        .argument('[branch]', 'custom branch name to reset to', 'main')
 }

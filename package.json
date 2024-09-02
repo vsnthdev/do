@@ -14,9 +14,9 @@
     "dependencies": {
         "bnx": "^0.3.1",
         "commander": "^12.1.0",
-        "execa": "^8.0.1",
-        "inquirer": "^9.3.5",
-        "listr2": "^8.2.3",
+        "execa": "^9.3.1",
+        "inquirer": "^9.3.6",
+        "listr2": "^8.2.4",
         "prompts": "^2.4.2",
         "rupa": "^0.0.4"
     }

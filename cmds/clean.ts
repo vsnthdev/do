@@ -63,6 +63,6 @@ async function action(branch: string) {
 export default function setup(app: Command) {
     app.command('clean')
         .action(action)
-        .description('Updates main branch to latest, deletes current branch')
+        .description('Updates default branch to latest, deletes current branch')
         .argument('[branch]', 'custom branch name to reset to', 'main')
 }

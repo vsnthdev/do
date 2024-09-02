@@ -6,10 +6,12 @@
 import sw from './switch'
 import clean from './clean'
 import update from './update'
+import open from './open'
 import { type Command } from 'commander'
 
 export function cmds(app: Command) {
     sw(app)
     clean(app)
     update(app)
+    open(app)
 }

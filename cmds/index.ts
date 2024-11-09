@@ -7,6 +7,7 @@ import sw from './switch'
 import clean from './clean'
 import update from './update'
 import open from './open'
+import config from './config/index'
 import { type Command } from 'commander'
 
 export function cmds(app: Command) {
@@ -14,4 +15,5 @@ export function cmds(app: Command) {
     clean(app)
     update(app)
     open(app)
+    config(app)
 }

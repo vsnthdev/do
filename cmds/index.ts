@@ -9,6 +9,7 @@ import update from './update'
 import open from './open'
 import config from './config/index'
 import { type Command } from 'commander'
+import clone from './clone'
 
 export function cmds(app: Command) {
     sw(app)
@@ -16,4 +17,5 @@ export function cmds(app: Command) {
     update(app)
     open(app)
     config(app)
+    clone(app)
 }

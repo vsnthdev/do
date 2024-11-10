@@ -16,10 +16,18 @@
         "commander": "^12.1.0",
         "conf": "^13.0.1",
         "execa": "^9.3.1",
+        "global-cache-dir": "^6.0.0",
         "inquirer": "^9.3.6",
+        "inquirer-autocomplete-standalone": "^0.8.1",
         "listr2": "^8.2.4",
+        "mkdirp": "^3.0.1",
+        "octokit": "^4.0.2",
         "open": "^10.1.0",
+        "ora": "^8.1.1",
         "prompts": "^2.4.2",
         "rupa": "^0.0.4"
-    }
+    },
+    "trustedDependencies": [
+        "es5-ext"
+    ]
 }

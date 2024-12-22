@@ -6,7 +6,7 @@
     "devDependencies": {
         "@types/inquirer": "^9.0.7",
         "@types/prompts": "^2.4.9",
-        "bun-types": "latest"
+        "bun-types": "1.1.42"
     },
     "peerDependencies": {
         "typescript": "^5.0.0"

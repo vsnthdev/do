@@ -15,12 +15,12 @@ import globalCacheDir from 'global-cache-dir'
 import fs from 'node:fs/promises'
 
 async function showCachedRepositories(file: string) {
-    const raw = await fs.readFile(file, 'utf-8')
-    const data: string[] = JSON.parse(raw)
-
     const answer = await autocomplete({
         message: 'Pick a repository from GitHub:',
         source: async (input) => {
+            const raw = await fs.readFile(file, 'utf-8')
+            const data: string[] = JSON.parse(raw)
+
             if (!input) return data.map(repo => ({
                 value: repo,
             }))

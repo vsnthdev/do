@@ -12,7 +12,7 @@ import path from 'node:path'
 import { mkdirp } from 'mkdirp'
 import { execaCommand } from 'execa'
 import globalCacheDir from 'global-cache-dir'
-import fs from 'node:fs/promises'
+import fs from 'fs/promises'
 
 async function showCachedRepositories(file: string) {
     const answer = await autocomplete({
@@ -53,12 +53,25 @@ async function showCachedRepositories(file: string) {
     })
 }
 
-async function action() {
+async function fresh(subprocess: any, file: string) {
+    const spinner = ora('Loading unicorns').start()
+
+    // as we don't have the existing cache available
+    // we freshly download by blocking the user
+    await subprocess.exited
+    spinner.stop()
+
+    await showCachedRepositories(file)
+}
+
+async function action(args: any) {
     if (!config.get('github.token')) {
         console.log(`No GitHub token has been configured.`)
         console.log(`Run: do config set github.token <your_token>`)
         return
     }
+
+    const file = path.join(await globalCacheDir('do-cli'), 'github-repositories.json')
 
     // download updated repositories in background
     const subprocess = Bun.spawn(['bun', 'run', 'scripts/download-repos.ts'], {
@@ -67,18 +80,14 @@ async function action() {
         stdin: 'ignore',
     })
 
-    const file = path.join(await globalCacheDir('do-cli'), 'github-repositories.json')
-    if (await fs.exists(file)) {
-        await showCachedRepositories(file)
+    if (args.fresh) {
+        await fresh(subprocess, file)
     } else {
-        const spinner = ora('Loading unicorns').start()
-
-        // as we don't have the existing cache available
-        // we freshly download by blocking the user
-        await subprocess.exited
-        spinner.stop()
-
-        await showCachedRepositories(file)
+        if (await fs.exists(file)) {
+            await showCachedRepositories(file)
+        } else {
+            await fresh(subprocess, file)
+        }
     }
 
     return process.exit(0)
@@ -88,4 +97,5 @@ export default function setup(app: Command) {
     app.command('clone')
         .action(action)
         .description('Clones a GitHub repository into the right path')
+        .option('--fresh', 'Freshly fetch repositories from GitHub')
 }

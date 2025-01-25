@@ -74,7 +74,8 @@ async function action(args: any) {
     const file = path.join(await globalCacheDir('do-cli'), 'github-repositories.json')
 
     // download updated repositories in background
-    const subprocess = Bun.spawn(['bun', 'run', 'scripts/download-repos.ts'], {
+    const scriptPath = path.join(import.meta.dirname, '..', 'scripts', 'download-repos.ts')
+    const subprocess = Bun.spawn(['bun', 'run', scriptPath], {
         stderr: 'ignore',
         stdout: 'ignore',
         stdin: 'ignore',

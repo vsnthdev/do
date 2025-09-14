@@ -3,29 +3,32 @@
     "module": "index.ts",
     "type": "module",
     "bin": "index.ts",
+    "scripts": {
+        "type-check": "bun --bun tsc --noEmit"
+    },
     "devDependencies": {
-        "@types/inquirer": "^9.0.7",
+        "@types/inquirer": "^9.0.9",
         "@types/prompts": "^2.4.9",
-        "bun-types": "1.1.42"
+        "bun-types": "1.2.21"
     },
     "peerDependencies": {
-        "typescript": "^5.0.0"
+        "typescript": "^5.9.2"
     },
     "dependencies": {
         "bnx": "^0.3.1",
-        "commander": "^12.1.0",
-        "conf": "^13.1.0",
-        "execa": "^9.5.2",
-        "global-cache-dir": "^6.0.0",
-        "inquirer": "^12.3.0",
+        "commander": "^14.0.1",
+        "conf": "^14.0.0",
+        "execa": "^9.6.0",
+        "global-cache-dir": "^6.0.1",
+        "inquirer": "^12.9.4",
         "inquirer-autocomplete-standalone": "^0.8.1",
-        "listr2": "^8.2.5",
+        "listr2": "^9.0.3",
         "mkdirp": "^3.0.1",
-        "octokit": "^4.0.2",
-        "open": "^10.1.0",
-        "ora": "^8.1.1",
+        "octokit": "^5.0.3",
+        "open": "^10.2.0",
+        "ora": "^8.2.0",
         "prompts": "^2.4.2",
-        "rupa": "^0.0.5"
+        "rupa": "^0.0.7"
     },
     "trustedDependencies": [
         "es5-ext"

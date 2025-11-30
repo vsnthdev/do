@@ -34,7 +34,7 @@ async function action(branch: string) {
             task.newListr([
                 {
                     title: 'Fetching updates',
-                    task: () => execaCommand('git fetch')
+                    task: () => execaCommand('git fetch --prune')
                 },
             ].concat(remotes.map(remote => ({
                 title: `Fetching ${remote} remote`,

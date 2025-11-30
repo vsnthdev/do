@@ -8,6 +8,7 @@
     },
     "devDependencies": {
         "@types/inquirer": "^9.0.9",
+        "@types/open": "^6.2.1",
         "@types/prompts": "^2.4.9",
         "bun-types": "1.2.21"
     },
@@ -15,19 +16,23 @@
         "typescript": "^5.9.2"
     },
     "dependencies": {
+        "@octokit/auth-oauth-device": "^8.0.3",
         "bnx": "^0.3.1",
+        "clipboardy": "^5.0.1",
         "commander": "^14.0.1",
         "conf": "^14.0.0",
         "execa": "^9.6.0",
         "global-cache-dir": "^6.0.1",
         "inquirer": "^12.9.4",
         "inquirer-autocomplete-standalone": "^0.8.1",
+        "keytar": "^7.9.0",
         "listr2": "^9.0.3",
         "mkdirp": "^3.0.1",
         "octokit": "^5.0.3",
-        "open": "^10.2.0",
+        "open": "^11.0.0",
         "ora": "^8.2.0",
         "prompts": "^2.4.2",
+        "rimraf": "^6.1.2",
         "rupa": "^0.0.7"
     },
     "trustedDependencies": [

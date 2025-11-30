@@ -10,6 +10,7 @@ import open from './open'
 import config from './config/index'
 import { type Command } from 'commander'
 import clone from './clone'
+import { login } from './login'
 
 export function cmds(app: Command) {
     sw(app)
@@ -18,4 +19,5 @@ export function cmds(app: Command) {
     open(app)
     config(app)
     clone(app)
+    login(app)
 }

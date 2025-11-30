@@ -2,8 +2,16 @@ import { type Command } from "commander";
 import { $ } from 'bnx'
 import prompt from 'prompts'
 import open from 'open'
+import path from 'path'
+
+function getRepositoryUrlFromGit(gitUrl: string) {
+    const parsed = path.parse(gitUrl)
+    return `${parsed.dir}/${parsed.name}`
+}
 
 async function action() {
+    const branch = (await $`git rev-parse --abbrev-ref HEAD`)
+
     const raw = (await $`git remote -v`)
         .trim()
         .split('\n')
@@ -23,9 +31,10 @@ async function action() {
             }))
         })
 
-        await open(ans)
+        await open(`${getRepositoryUrlFromGit(ans)}/tree/${branch.trim()}`)
     } else {
-        await open(unique[0].split(' ').pop()?.trim()!)
+        const gitUrl = unique[0].split(' ').pop()?.trim()!
+        await open(`${getRepositoryUrlFromGit(gitUrl)}/tree/${branch.trim()}`)
     }
 }
 

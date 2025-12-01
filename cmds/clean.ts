@@ -2,6 +2,9 @@ import { $ } from 'bnx'
 import { Listr } from 'listr2'
 import { execaCommand } from 'execa'
 import { type Command } from 'commander'
+import keytar from 'keytar'
+import { Octokit } from 'octokit'
+import path from 'path'
 
 interface Ctx {
     currentBranch: string
@@ -11,6 +14,8 @@ interface Ctx {
 async function action(branch: string) {
     const currentBranch = (await $`git branch --show-current`).trim()
     const remotes = (await $`git remote`).trim().split('\n')
+    const parsed = path.parse((await $`git remote get-url origin`))
+    const owner = parsed.dir.split('/').pop()!
 
     if (currentBranch == branch) return console.log(`You are already in ${branch}!`)
 
@@ -49,7 +54,29 @@ async function action(branch: string) {
         },
         {
             title: `Deleting ${currentBranch} branch`,
-            task: () => execaCommand(`git branch -D ${currentBranch}`)
+            task: (_, task): Listr => task.newListr([
+                {
+                    title: `Deleting ${currentBranch} locally`,
+                    task: () => execaCommand(`git branch -D ${currentBranch}`)
+                },
+                {
+                    title: `Deleting ${currentBranch} on GitHub`,
+                    task: async () => {
+                        const token = await keytar.getPassword('do-cli-vsnthdev', 'github-token')
+                        const octokit = new Octokit({ auth: token })
+
+                        const deletionResponse = await octokit.rest.git.deleteRef({
+                            owner,
+                            repo: parsed.name,
+                            ref: `heads/${currentBranch}`
+                        })
+
+                        if (deletionResponse.status != 204) {
+                            throw new Error(`Failed deleting remote repository at GitHub`)
+                        }
+                    }
+                }
+            ])
         }
     ])
 

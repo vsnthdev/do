@@ -13,6 +13,7 @@ import { mkdirp } from 'mkdirp'
 import { execaCommand } from 'execa'
 import globalCacheDir from 'global-cache-dir'
 import fs from 'fs/promises'
+import keytar from 'keytar'
 
 async function showCachedRepositories(file: string) {
     const answer = await autocomplete({
@@ -65,9 +66,11 @@ async function fresh(subprocess: any, file: string) {
 }
 
 async function action(args: any) {
-    if (!config.get('github.token')) {
-        console.log(`No GitHub token has been configured.`)
-        console.log(`Run: do config set github.token <your_token>`)
+    const token = await keytar.getPassword('do-cli-vsnthdev', 'github-token')
+
+    if (!token) {
+        console.log(`You have not logged into GitHub`)
+        console.log(`Run: do login`)
         return
     }
 

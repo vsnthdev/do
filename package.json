@@ -36,6 +36,7 @@
         "rupa": "^0.0.7"
     },
     "trustedDependencies": [
-        "es5-ext"
+        "es5-ext",
+        "keytar"
     ]
 }

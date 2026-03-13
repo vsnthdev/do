@@ -65,6 +65,17 @@ async function action(branch: string) {
                         const token = await keytar.getPassword('do-cli-vsnthdev', 'github-token')
                         const octokit = new Octokit({ auth: token })
 
+                        try {
+                            await octokit.rest.git.getRef({
+                                owner,
+                                repo: parsed.name,
+                                ref: `heads/${currentBranch}`
+                            })
+                        } catch (e: any) {
+                            if (e.status === 404) return
+                            throw e
+                        }
+
                         const deletionResponse = await octokit.rest.git.deleteRef({
                             owner,
                             repo: parsed.name,

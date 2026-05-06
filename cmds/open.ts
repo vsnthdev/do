@@ -2,11 +2,34 @@ import { type Command } from "commander";
 import { $ } from 'bnx'
 import prompt from 'prompts'
 import open from 'open'
-import path from 'path'
 
-function getRepositoryUrlFromGit(gitUrl: string) {
-    const parsed = path.parse(gitUrl)
-    return `${parsed.dir}/${parsed.name}`
+function convertToHttpUrl(gitUrl: string): string {
+    let url = gitUrl
+
+    if (url.startsWith('ssh://')) {
+        url = url.replace('ssh://', '')
+    }
+
+    if (url.startsWith('git@')) {
+        url = url.replace('git@', '')
+    }
+
+    if (url.includes('@')) {
+        url = url.split('@').pop() || url
+    }
+
+    if (url.includes(':')) {
+        url = url.replace(':', '/')
+    }
+
+    return `https://${url.replace('.git', '')}`
+}
+
+function getBranchUrl(baseUrl: string, branch: string): string {
+    if (baseUrl.includes('codeberg.org')) {
+        return `${baseUrl}/src/branch/${branch}`
+    }
+    return `${baseUrl}/tree/${branch}`
 }
 
 async function action() {
@@ -31,10 +54,12 @@ async function action() {
             }))
         })
 
-        await open(`${getRepositoryUrlFromGit(ans)}/tree/${branch.trim()}`)
+        const urlToOpen = getBranchUrl(convertToHttpUrl(ans), branch.trim())
+        await open(urlToOpen)
     } else {
         const gitUrl = unique[0].split(' ').pop()?.trim()!
-        await open(`${getRepositoryUrlFromGit(gitUrl)}/tree/${branch.trim()}`)
+        const urlToOpen = getBranchUrl(convertToHttpUrl(gitUrl), branch.trim())
+        await open(urlToOpen)
     }
 }
 

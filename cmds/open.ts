@@ -4,7 +4,11 @@ import prompt from 'prompts'
 import open from 'open'
 
 function convertToHttpUrl(gitUrl: string): string {
-    let url = gitUrl
+    let url = gitUrl.trim()
+
+    if (url.startsWith('https://') || url.startsWith('http://')) {
+        return url.replace('.git', '')
+    }
 
     if (url.startsWith('ssh://')) {
         url = url.replace('ssh://', '')
@@ -22,7 +26,9 @@ function convertToHttpUrl(gitUrl: string): string {
         url = url.replace(':', '/')
     }
 
-    return `https://${url.replace('.git', '')}`
+    url = url.replace('.git', '')
+
+    return `https://${url}`
 }
 
 function getBranchUrl(baseUrl: string, branch: string): string {

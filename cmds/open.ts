@@ -40,7 +40,7 @@ function getBranchUrl(baseUrl: string, branch: string): string {
 
 async function openUrl(url: string, cmuxCli?: string, hasCli?: boolean) {
     if (cmuxCli && hasCli) {
-        Bun.spawn([cmuxCli, 'browser', 'open', url])
+        Bun.spawn([cmuxCli, 'browser', 'open-split', '--focus', 'true', url])
     } else {
         await open(url)
     }

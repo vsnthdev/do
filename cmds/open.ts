@@ -38,10 +38,26 @@ function getBranchUrl(baseUrl: string, branch: string): string {
     return `${baseUrl}/tree/${branch}`
 }
 
-async function action() {
-    const branch = (await $`git rev-parse --abbrev-ref HEAD`)
+async function openUrl(url: string, cmuxCli?: string, hasCli?: boolean) {
+    if (cmuxCli && hasCli) {
+        Bun.spawn([cmuxCli, 'browser', 'open', url])
+    } else {
+        await open(url)
+    }
+}
 
-    const raw = (await $`git remote -v`)
+async function action() {
+    const cmuxCli = Bun.env.CMUX_BUNDLED_CLI_PATH
+
+    const [branchResult, rawResult, hasCli] = await Promise.all([
+        $`git rev-parse --abbrev-ref HEAD`,
+        $`git remote -v`,
+        cmuxCli ? Bun.file(cmuxCli).exists() : Promise.resolve(false)
+    ])
+
+    const branch = branchResult.trim()
+
+    const raw = rawResult
         .trim()
         .split('\n')
         .map(line => line.split('\t').map((chunk, idx) => idx == 1 ? chunk.split(' ').shift()?.trim() : chunk.trim()))
@@ -60,12 +76,12 @@ async function action() {
             }))
         })
 
-        const urlToOpen = getBranchUrl(convertToHttpUrl(ans), branch.trim())
-        await open(urlToOpen)
+        const urlToOpen = getBranchUrl(convertToHttpUrl(ans), branch)
+        await openUrl(urlToOpen, cmuxCli, hasCli)
     } else {
         const gitUrl = unique[0].split(' ').pop()?.trim()!
-        const urlToOpen = getBranchUrl(convertToHttpUrl(gitUrl), branch.trim())
-        await open(urlToOpen)
+        const urlToOpen = getBranchUrl(convertToHttpUrl(gitUrl), branch)
+        await openUrl(urlToOpen, cmuxCli, hasCli)
     }
 }
 

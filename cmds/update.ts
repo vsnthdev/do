@@ -14,6 +14,7 @@ interface Ctx {
 
 async function action() {
     const remotes = (await $`git remote`).trim().split('\n')
+    const branch = (await $`git branch --show-current`).trim()
 
     const tasks = new Listr<Ctx>(
         [], {
@@ -37,11 +38,18 @@ async function action() {
             }))))
     })
 
+    tasks.add(
+        remotes.map(remote => ({
+            title: `Pulling new changes from ${remote}`,
+            task: () => execaCommand(`git pull ${remote} ${branch} --rebase`)
+        }))
+    )
+
     tasks.add([
         {
-            title: `Pulling new changes`,
-            task: () => execaCommand(`git pull`)
-        },
+            title: 'Pushing changes',
+            task: () => execaCommand('git push')
+        }
     ])
 
     try {

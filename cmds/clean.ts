@@ -48,10 +48,10 @@ async function action(branch: string) {
     })
 
     tasks.add([
-        {
-            title: `Pulling new changes`,
-            task: () => execaCommand(`git pull`)
-        },
+        ...remotes.map(remote => ({
+            title: `Pulling new changes from ${remote}`,
+            task: () => execaCommand(`git pull ${remote} ${branch} --rebase`)
+        })),
         {
             title: `Deleting ${currentBranch} branch`,
             task: (_, task): Listr => task.newListr([

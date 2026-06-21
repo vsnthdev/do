@@ -88,6 +88,10 @@ async function action(branch: string) {
                     }
                 }
             ])
+        },
+        {
+            title: 'Pushing changes',
+            task: () => execaCommand('git push')
         }
     ])
 

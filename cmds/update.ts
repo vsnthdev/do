@@ -48,7 +48,7 @@ async function action() {
     tasks.add([
         {
             title: 'Pushing changes',
-            task: () => execaCommand('git push')
+            task: () => execaCommand('git push --force')
         }
     ])
 

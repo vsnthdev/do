@@ -17,7 +17,12 @@ async function action() {
     const branch = (await $`git branch --show-current`).trim()
 
     const tasks = new Listr<Ctx>(
-        [], {
+        [
+            {
+                title: 'Resetting changes',
+                task: () => execaCommand('git reset --hard')
+            }
+        ], {
         ctx: {
             remotes,
         }
